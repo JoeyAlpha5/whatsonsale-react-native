@@ -1,114 +1,101 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import {Text} from 'react-native';
+// auth screens
+import Register from './src/Screens/Auth/Register';
+import GetStarted from './src/Screens/Auth/GetStarted';
+import SignIn from './src/Screens/Auth/SignIn';
+import PasswordReset from './src/Screens/Auth/PasswordReset';
+// tab screens
+import Home from './src/Screens/Tabs/Home';
+import Search from './src/Screens/Tabs/Search';
+import News from './src/Screens/Tabs/News';
+import Profile from './src/Screens/Tabs/Profile';
+// post and retailer screen
+import ViewPost from './src/Screens/ViewPost';
+import ViewRetailer from './src/Screens/ViewRetailer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Feather';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+const App = () => {
+  const [signedIn, setSignedIn] = useState(false);
+  const SignedOut = createStackNavigator();
+  const SignedIn = createBottomTabNavigator();
+  // update sign in state
+  const signIn = (val) =>{
+    setSignedIn(val);
+  }
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  const HomeStack = createStackNavigator();
+  const HomeStackScreen = ({navigation,route})=>{
+    return(
+      <HomeStack.Navigator>
+            <HomeStack.Screen  name="home" component={Home} options={{headerShown:false}}/>
+            <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:false}}/>
+      </HomeStack.Navigator>
+    )
+  };
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+  if(!signedIn){
+    return(
+      <NavigationContainer>
+          <SignedOut.Navigator>
+            <SignedOut.Screen name={"getStarted"} component={GetStarted} options={{headerShown:false}}/>
+            <SignedOut.Screen name={"signIn"} initialParams={{ authenticate: signIn }} component={SignIn} options={{headerShown:false}}/>
+            <SignedOut.Screen name={"register"} initialParams={{ authenticate: signIn }} component={Register} options={{headerShown:false}}/>
+            <SignedOut.Screen name={"passwordReset"} component={PasswordReset} options={{headerShown:false}}/>
+          </SignedOut.Navigator>
+      </NavigationContainer>
+    );
+  }else{
+    return(
+      <NavigationContainer>
+          <SignedIn.Navigator
+            screenOptions={({ route }) => ({  
+              // tintColor:'red',             
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                if (route.name === 'home') {
+                  iconName = focused ? 'home': 'home';
+                } else if (route.name === 'search') {
+                  iconName = focused ? 'search' : 'search';
+                }
+                else if (route.name === 'news') {
+                  iconName = focused ? 'message-circle' : 'message-circle';
+                }else if (route.name === 'profile') {
+                  iconName = focused ? 'user' : 'user';
+                }
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={20} color={color} />;
+              },
+            })}
+
+            
+            tabBarOptions= {{
+              activeTintColor: "#DA0E2F",
+              inactiveTintColor: '#575757',
+              keyboardHidesTabBar:true,
+              showLabel:true,
+              style:{
+                backgroundColor:'#FAFAFA',
+                borderTopWidth:0,
+                height:80,
+                borderTopWidth:0.5, 
+                borderColor:'rgb(0 0 0 / 50%)',
+              },
+      
+            }}
+          >
+            <SignedIn.Screen name={"home"} component={HomeStackScreen} navigationOptions={{title: 'Tab2'}}/>
+            <SignedIn.Screen name={"search"} component={Search}/>
+            <SignedIn.Screen name={"profile"} component={Profile}/>
+            <SignedIn.Screen name={"news"} component={News}/>
+          </SignedIn.Navigator>
+      </NavigationContainer>
+    );
+  }
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
