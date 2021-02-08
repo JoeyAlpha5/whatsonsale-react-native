@@ -1,8 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from '../../Components/Button';
-import { Icon } from 'react-native-elements';
+import { Icon, Overlay } from 'react-native-elements';
+import PopUp from '../../Components/PopUp';
+import Loader from '../../Components/Loader';
 import {View, Text, StatusBar,StyleSheet, Image,TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {authentication} from '../../firebase/firebase';
 const PasswordReset = ({navigation})=>{
+    const [overlay,setOverlay] = useState(false);
+    const [OverlayText,setOverlayText] = useState("");
+    const [resetSent,setResetSent] = useState(false);
+    const [popUpErr,setpopUpErr] = useState(false);
+    const [email,onChangeEmail] = useState('');
+    const [loader,setLoader] = useState(false);
+
+    const validate = ()=>{
+        if(email == '' ){
+            showErr(true,true,"Unable to sign in \n please enter your email");
+        }else{
+            setLoader(true);
+            resetPassword();
+        }
+    }
+
+    const resetPassword = () =>{
+        var reset = authentication.sendPasswordResetEmail(email);
+        reset.then(()=>{
+            setLoader(false);
+            setResetSent(true);
+        }).catch((err)=>{
+            setLoader(false);
+            showErr(true,true,err.message);
+        })
+    }
+
+    const showErr = (show_overlay,show_popup,overlay_text)=>{
+        setOverlay(show_overlay);
+        setpopUpErr(show_popup);
+        setOverlayText(overlay_text);
+    }
     return(
         <>
             <StatusBar  backgroundColor="white" barStyle="dark-content"/>
@@ -19,12 +54,21 @@ const PasswordReset = ({navigation})=>{
                         </View>
                         <View style={{width:'80%',marginBottom:20}}>
                             <Text style={{color:'#fff',fontSize:40,marginTop:10,marginBottom:30}}>Update {'\n'}password</Text> 
-                            <TextInput style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10}} placeholderTextColor="#fff" placeholder="Email" />    
+                            <TextInput value={email} onChangeText={text => onChangeEmail(text)} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10}} placeholderTextColor="#fff" placeholder="Email" />    
                         </View>
                         <Button buttonFunction={()=>validate()} bgcolor="#DA0E2F" text="Confirm" color={"white"} outline={false}/>
                     </View>
                 </ScrollView>
             </View>
+            <Overlay isVisible={overlay}>
+                <PopUp errorBtn={()=>setOverlay(false)} text={OverlayText} error={popUpErr} />
+            </Overlay>
+            <Overlay isVisible={resetSent}>
+                <PopUp successBtn={()=>{setResetSent(false);onChangeEmail("")}} text={"Password reset link has been sent to your email account."} />
+            </Overlay>
+            <Overlay isVisible={loader} onBackdropPress={()=>setLoader(false)}>
+                <Loader text={'Processing, please wait..'}/>
+            </Overlay>
         </>
     )
 }

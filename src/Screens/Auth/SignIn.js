@@ -4,6 +4,7 @@ import PopUp from '../../Components/PopUp';
 import Loader from '../../Components/Loader';
 import {View, Text,Image, StyleSheet, StatusBar,ScrollView, TouchableOpacity,TextInput} from 'react-native';
 import { Icon,Overlay } from 'react-native-elements';
+import {authentication} from '../../firebase/firebase';
 const SignIn = ({navigation,route})=>{
     const [overlay,setOverlay] = useState(false);
     const [OverlayText,setOverlayText] = useState("");
@@ -17,13 +18,39 @@ const SignIn = ({navigation,route})=>{
     }
 
     const validate = () =>{
-        setOverlay(true);
-        setOverlayText("Please complete all required fields");
+        if(email == '' && password == ''){
+            showErr(true,true,"Unable to sign in \n please fill in all fields");
+        }else if(email == ''){
+            showErr(true,true,"Unable to sign in \n please enter your email");
+        }else if(password == ''){
+            showErr(true,true,"Unable to sign in \n please enter your password");
+        }else{
+            setOverlay(false);
+            setLoader(true);
+            signIn();
+        }
     }
 
     const signIn = ()=>{
-        setLoader(true);
-        route.params.authenticate(true);
+        authentication.signInWithEmailAndPassword(email,password)
+        .then((response)=>{
+            if(authentication.currentUser.emailVerified){
+                route.params.authenticate(true);
+            }else{
+                showErr(true,true,"Please verify your account before signing in");
+            }
+            setLoader(false);
+        }).catch(err=>{
+            setLoader(false);
+            showErr(true,true,err.message);
+        });
+    }
+
+
+    const showErr = (show_overlay,show_popup,overlay_text)=>{
+        setOverlay(show_overlay);
+        setpopUpErr(show_popup);
+        setOverlayText(overlay_text);
     }
 
     return(
@@ -46,7 +73,7 @@ const SignIn = ({navigation,route})=>{
                             <TextInput value={email} onChangeText={text => onChangeEmail(text)} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10}} placeholderTextColor="#fff" placeholder="Email" />  
                             <TextInput value={password} onChangeText={text => onChangePassword(text)} secureTextEntry={true} style={{height:52,width:'100%',color:'white',borderRadius:10,marginTop:10,borderWidth:1,borderColor:'white',paddingLeft:10}} placeholderTextColor="#fff" placeholder="Password" />  
                         </View>
-                        <Button buttonFunction={signIn} bgcolor="#DA0E2F" text="Sign in" color={"white"} outline={false}/>
+                        <Button buttonFunction={()=>validate()} bgcolor="#DA0E2F" text="Sign in" color={"white"} outline={false}/>
                         <TouchableOpacity onPress={()=>navigation.navigate('passwordReset')}>
                             <Text style={{color:'white',marginTop:20,color:'#242424',textDecorationLine:'underline'}}>Forgot password</Text>
                         </TouchableOpacity>
