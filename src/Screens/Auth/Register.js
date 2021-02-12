@@ -27,9 +27,23 @@ const Register = ({navigation,route})=>{
         // route.params.authenticate(true);
         var register = authentication.createUserWithEmailAndPassword(Email,Password);
         register.then((user)=>{
-            authentication.currentUser.sendEmailVerification(); 
-            setLoader(false);
-            setRegistered(true); 
+            // send verification email
+            authentication.currentUser.sendEmailVerification();
+            // save user data in django backend
+            fetch('https://4da248b5236a.ngrok.io/api/createAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body:"name="+name+"&email="+Email+"&mobile="+Mobile+"&user_id="+authentication.currentUser.uid,
+            }).then(()=>{
+                setLoader(false);
+                setRegistered(true); 
+            }).catch((err)=>{
+                setLoader(false);
+                showErr(true,true,err.message);
+            })
+            
         }).catch(err=>{
             setLoader(false);
             showErr(true,true,err.message);
