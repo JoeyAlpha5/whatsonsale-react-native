@@ -12,7 +12,7 @@ const SignIn = ({navigation,route})=>{
     const [email,onChangeEmail] = useState('');
     const [password,onChangePassword] = useState('');
     const [loader,setLoader] = useState(false);
-
+    
     const back = ()=>{
         navigation.navigate("getStarted");
     }

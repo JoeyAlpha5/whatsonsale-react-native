@@ -30,7 +30,7 @@ const Register = ({navigation,route})=>{
             // send verification email
             authentication.currentUser.sendEmailVerification();
             // save user data in django backend
-            fetch('https://4da248b5236a.ngrok.io/api/createAccount', {
+            fetch('https://57c8f3849fcd.ngrok.io/api/createAccount', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -41,7 +41,7 @@ const Register = ({navigation,route})=>{
                 setRegistered(true); 
             }).catch((err)=>{
                 setLoader(false);
-                showErr(true,true,err.message);
+                showErr(true,true,"Registration error.");
             })
             
         }).catch(err=>{

@@ -20,7 +20,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Feather';
 
 const App = () => {
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = useState(true);
   const SignedOut = createStackNavigator();
   const SignedIn = createBottomTabNavigator();
   // update sign in state
@@ -32,7 +32,7 @@ const App = () => {
   const HomeStackScreen = ({navigation,route})=>{
     return(
       <HomeStack.Navigator>
-            <HomeStack.Screen  name="home" component={Home} options={{headerShown:false}}/>
+            <HomeStack.Screen  name="home" initialParams={{ authenticate: signIn }} component={Home} options={{headerShown:false}}/>
             <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:false}}/>
       </HomeStack.Navigator>
     )
@@ -88,7 +88,7 @@ const App = () => {
       
             }}
           >
-            <SignedIn.Screen name={"home"} component={HomeStackScreen} navigationOptions={{title: 'Tab2'}}/>
+            <SignedIn.Screen name={"home"} component={HomeStackScreen}/>
             <SignedIn.Screen name={"search"} component={Search}/>
             <SignedIn.Screen name={"profile"} component={Profile}/>
             <SignedIn.Screen name={"news"} component={News}/>
