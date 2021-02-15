@@ -7,38 +7,38 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const SearchFilter = (props)=>{
     const [selected,setSelected] = useState('');
     return(
-        <Tooltip height={400} width={200} style={style.tooltip} backgroundColor={"#000"} popover={
+        <Tooltip height={400} width={200} style={style.tooltip} backgroundColor={"#fff"} popover={
             <ScrollView>
                 <View style={style.category}>
                     <CheckBox onPress={()=>setSelected('')} checkedColor={"#DA0E2F"} checked={selected == ""? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>All</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>All</Text>
                 </View>                
                 <View style={style.category}>
                     <CheckBox onPress={()=>setSelected('Clothing')} checkedColor={"#DA0E2F"} checked={selected == "Clothing"? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>Clothing</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>Clothing</Text>
                 </View>
                 <View style={style.category}>
                     <CheckBox checkedColor={"#DA0E2F"} onPress={()=>setSelected('Home Care')} checked={selected == "Home Care"? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>Home Care</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>Home Care</Text>
                 </View>
                 <View style={style.category}>
                     <CheckBox checkedColor={"#DA0E2F"} onPress={()=>setSelected('Electronics')} checked={selected == "Electronics"? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>Electronics</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>Electronics</Text>
                 </View>
                 <View style={style.category}>
                     <CheckBox checkedColor={"#DA0E2F"} onPress={()=>setSelected('Restuarants')} checked={selected == "Restuarants"? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>Restuarants</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>Restuarants</Text>
                 </View>
                 <View style={style.category}>
                     <CheckBox checkedColor={"#DA0E2F"} onPress={()=>setSelected('Banks')} checked={selected == "Banks"? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>Banks</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>Banks</Text>
                 </View>
                 <View style={style.category}>
                     <CheckBox checkedColor={"#DA0E2F"} onPress={()=>setSelected('Entertainment')} checked={selected == "Entertainment"? true: false} checkedIcon='dot-circle-o' uncheckedIcon='circle-o'/>
-                    <Text style={{color:'#fff',marginLeft:0}}>Entertainment</Text>
+                    <Text style={{color:'#000',marginLeft:0}}>Entertainment</Text>
                 </View>
 
-                <Button onPress={()=>props.filter(selected)} titleStyle={{color:'#000'}} buttonStyle={style.button} title={"Apply filter"}/>
+                <Button onPress={()=>props.filter(selected)} titleStyle={{color:'#fff'}} buttonStyle={style.button} title={"Apply filter"}/>
             </ScrollView>
         }>
             <View style={style.filter}>
@@ -67,8 +67,7 @@ const style = StyleSheet.create({
 
     },
     button:{
-        backgroundColor:'#fff',
-        color:'#000',
+        backgroundColor:'#000',
         width:'100%',
         marginTop:10,
     }

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet,Image, FlatList, ScrollView} from 'react-native';
+import {View, Text, StyleSheet,Image, TouchableOpacity, ScrollView} from 'react-native';
 const SearchResult = (props)=>{
     return(
         <>
@@ -7,7 +7,7 @@ const SearchResult = (props)=>{
                 {
                     props.data.map(item=>{
                         return(
-                            <View style={style.searchResults}>
+                            <TouchableOpacity onPress={()=>props.viewBrand(item)} style={style.searchResults}>
                                 <View style={style.post}>
                                     <Image style={style.image} source={{uri:item.logo}}/>
                                     <View style={style.text}>
@@ -16,7 +16,7 @@ const SearchResult = (props)=>{
                                         <Text style={{color:'#DA0E2F',width:200,fontSize:12}} numberOfLines={1}>{item.category}</Text>
                                     </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         )
                     })
                 }
@@ -39,7 +39,7 @@ const style = StyleSheet.create({
         borderRadius:40,
         backgroundColor:'rgba(0, 0, 0, 0.06)',
         marginLeft:15,
-        resizeMode:'cover'
+        resizeMode:'cover',
     },
     text:{
         marginLeft:15,

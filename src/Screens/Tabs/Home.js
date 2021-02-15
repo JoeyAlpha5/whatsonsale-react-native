@@ -13,7 +13,7 @@ const Home = ({navigation,route})=>{
     },[]);
     return(
         <View>
-            <PageHeader title="Home" color="#DA0E2F"/>
+            {/* <PageHeader title="Home" color="#DA0E2F"/> */}
             <Text>Home</Text>
         </View>
     )

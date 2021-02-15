@@ -11,6 +11,7 @@ import Home from './src/Screens/Tabs/Home';
 import Search from './src/Screens/Tabs/Search';
 import News from './src/Screens/Tabs/News';
 import Profile from './src/Screens/Tabs/Profile';
+import Brand from './src/Screens/Brand';
 // post and retailer screen
 import ViewPost from './src/Screens/ViewPost';
 import ViewRetailer from './src/Screens/ViewRetailer';
@@ -32,9 +33,37 @@ const App = () => {
   const HomeStackScreen = ({navigation,route})=>{
     return(
       <HomeStack.Navigator>
-            <HomeStack.Screen  name="home" initialParams={{ authenticate: signIn }} component={Home} options={{headerShown:false}}/>
-            <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:false}}/>
+            <HomeStack.Screen  name="home" initialParams={{ authenticate: signIn }} component={Home} options={{headerShown:true}}/>
+            <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:true}}/>
       </HomeStack.Navigator>
+    )
+  };
+
+  const SearchStack = createStackNavigator();
+  const SearchStackScreen = ({navigation,route})=>{
+    return(
+      <SearchStack.Navigator>
+            <SearchStack.Screen name="search" component={Search} />
+            <SearchStack.Screen  name="brand" component={Brand} options={({ route }) => ({ title: route.params.data.name })}/>
+      </SearchStack.Navigator>
+    )
+  };
+
+  const ProfileStack = createStackNavigator();
+  const ProfileStackScreen = ({navigation,route})=>{
+    return(
+      <ProfileStack.Navigator>
+            <ProfileStack.Screen name="profile" component={Profile} />
+      </ProfileStack.Navigator>
+    )
+  };
+
+  const NewsStack = createStackNavigator();
+  const NewsStackScreen = ({navigation,route})=>{
+    return(
+      <NewsStack.Navigator>
+            <NewsStack.Screen name="news" component={News} />
+      </NewsStack.Navigator>
     )
   };
 
@@ -89,9 +118,9 @@ const App = () => {
             }}
           >
             <SignedIn.Screen name={"home"} component={HomeStackScreen}/>
-            <SignedIn.Screen name={"search"} component={Search}/>
-            <SignedIn.Screen name={"profile"} component={Profile}/>
-            <SignedIn.Screen name={"news"} component={News}/>
+            <SignedIn.Screen name={"search"} component={SearchStackScreen}/>
+            <SignedIn.Screen name={"profile"} component={ProfileStackScreen}/>
+            <SignedIn.Screen name={"news"} component={NewsStackScreen}/>
           </SignedIn.Navigator>
       </NavigationContainer>
     );

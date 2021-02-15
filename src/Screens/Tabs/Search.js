@@ -1,9 +1,9 @@
 import React, {useState,useEffect} from 'react';
 import {View, Text, TextInput, StyleSheet, ActivityIndicator} from 'react-native';
-import PageHeader from '../../Components/Header';
 import SearchFilter from '../../Components/SearchFilter';
 import SearchResult from '../../Components/SearchResult';
-const Search = ()=>{
+import {authentication} from '../../firebase/firebase';
+const Search = ({navigation,route})=>{
     const [searchResults,setSearchResults] = useState([]);
     const [SearchInput,setSearchInput] = useState('');
     const [Loading,setLoading] = useState(false);
@@ -18,8 +18,8 @@ const Search = ()=>{
     const getSearchResults = (searchInput)=>{
         setSearchInput(searchInput);
         if(searchInput != "") {
-            setLoading(true)
-            fetch("https://b6d481bfe7be.ngrok.io/api/searchPage?searchInput="+searchInput+"&searchCategory="+Category)
+            setLoading(true);
+            fetch("https://7deeed01e5c3.ngrok.io/api/searchPage?searchInput="+searchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
             .then(re=>re.json())
             .then(re=>{
                 setSearchResults(re.data)
@@ -36,9 +36,16 @@ const Search = ()=>{
         setCategory(category);       
     }
 
+    const viewBrand = (brand)=>{
+        setSearchInput("");
+        setLoading(false);
+        setSearchResults([]);
+        navigation.navigate('brand', {data:brand});
+    }
+
     return(
         <View>
-            <PageHeader title="Search" color="#DA0E2F"/>
+            {/* <PageHeader title="Search" color="#DA0E2F"/> */}
             <View style={style.top}>
                 <View style={style.innerTop}>
                     <Text style={style.title}>Search</Text>
@@ -50,7 +57,7 @@ const Search = ()=>{
                 </View>
             </View>
             
-            {Loading==false?<SearchResult data={searchResults}/>:<ActivityIndicator size="small" color="#000000" />}
+            {Loading==false?<SearchResult viewBrand={(brand)=>viewBrand(brand)} data={searchResults}/>:<ActivityIndicator size="small" color="#000000" />}
             
 
         
