@@ -1,17 +1,41 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import React, {useState,useEffect} from 'react';
+import {View, Text, TextInput, StyleSheet, ActivityIndicator} from 'react-native';
 import PageHeader from '../../Components/Header';
 import SearchFilter from '../../Components/SearchFilter';
+import SearchResult from '../../Components/SearchResult';
 const Search = ()=>{
     const [searchResults,setSearchResults] = useState([]);
+    const [SearchInput,setSearchInput] = useState('');
+    const [Loading,setLoading] = useState(false);
+    const [Category,setCategory] = useState('');
+
+    useEffect(()=>{
+        // get search results when category is updated
+        setLoading(true);
+        getSearchResults(SearchInput);
+    },[Category])
+
     const getSearchResults = (searchInput)=>{
-        console.log("search input ", searchInput);
-        fetch("https://5fb2c1bc2020.ngrok.io/api/searchPage?searchInput="+searchInput)
-        .then(re=>re.json())
-        .then(re=>{
-            console.log(re);
-        })
+        setSearchInput(searchInput);
+        if(searchInput != "") {
+            setLoading(true)
+            fetch("https://b6d481bfe7be.ngrok.io/api/searchPage?searchInput="+searchInput+"&searchCategory="+Category)
+            .then(re=>re.json())
+            .then(re=>{
+                setSearchResults(re.data)
+                setLoading(false);
+            });
+        }
+        else{
+            setLoading(false);
+            setSearchResults([]);
+        } 
     }
+
+    const applyFilter = (category)=>{
+        setCategory(category);       
+    }
+
     return(
         <View>
             <PageHeader title="Search" color="#DA0E2F"/>
@@ -20,13 +44,16 @@ const Search = ()=>{
                     <Text style={style.title}>Search</Text>
                     <Text adjustsFontSizeToFit>Find your favourite brands</Text>
                     <View style={style.searchView}>
-                        <TextInput onChangeText={text=>getSearchResults(text)} style={style.searchInput} placeholder={"Search for brands."}/>
-                        <SearchFilter/>
+                        <TextInput onChangeText={text=>getSearchResults(text)} style={style.searchInputStyle} placeholder={"Search for brands."}/>
+                        <SearchFilter filter={applyFilter}/>
                     </View>
                 </View>
             </View>
             
+            {Loading==false?<SearchResult data={searchResults}/>:<ActivityIndicator size="small" color="#000000" />}
+            
 
+        
         </View>
     )
 }
@@ -40,14 +67,15 @@ const style = StyleSheet.create({
     top:{
         width:'100%',
         marginTop:20,
-        alignItems:'center'
+        alignItems:'center',
+        paddingBottom:20
         
     },
     searchView:{
         width:'100%',
         flexDirection:'row',
     },
-    searchInput:{
+    searchInputStyle:{
         height:40,
         width:'88%',
         backgroundColor:'rgba(0, 0, 0, 0.06)',
@@ -58,5 +86,4 @@ const style = StyleSheet.create({
     innerTop:{
         width:'95%'
     },
-
 })
