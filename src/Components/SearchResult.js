@@ -7,7 +7,7 @@ const SearchResult = (props)=>{
                 {
                     props.data.map(item=>{
                         return(
-                            <TouchableOpacity onPress={()=>props.viewBrand(item)} style={style.searchResults}>
+                            <TouchableOpacity key={item.id} onPress={()=>props.viewBrand(item)} style={style.searchResults}>
                                 <View style={style.post}>
                                     <Image style={style.image} source={{uri:item.logo}}/>
                                     <View style={style.text}>

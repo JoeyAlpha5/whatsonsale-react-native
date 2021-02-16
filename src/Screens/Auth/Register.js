@@ -30,7 +30,7 @@ const Register = ({navigation,route})=>{
             // send verification email
             authentication.currentUser.sendEmailVerification();
             // save user data in django backend
-            fetch('https://57c8f3849fcd.ngrok.io/api/createAccount', {
+            fetch('https://1b0eda077bf5.ngrok.io/api/createAccount', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
