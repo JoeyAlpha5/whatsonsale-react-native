@@ -48,7 +48,7 @@ const PasswordReset = ({navigation})=>{
                 <ScrollView style={style.bottomSection} contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
                     <View style={{justifyContent:'center',alignItems:'center',height:'100%'}}>
                         <View style={{width:'95%',height:50, alignItems:'flex-start'}}>
-                            <TouchableOpacity onPress={()=>navigation.navigate('getStarted')}>
+                            <TouchableOpacity onPress={()=>navigation.navigate('signIn')}>
                                 <Icon size={50} color={'#fff'} name='chevron-left' />
                             </TouchableOpacity>
                         </View>

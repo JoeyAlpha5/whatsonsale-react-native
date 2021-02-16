@@ -42,7 +42,7 @@ const SignIn = ({navigation,route})=>{
             setLoader(false);
         }).catch(err=>{
             setLoader(false);
-            showErr(true,true,err.message);
+            showErr(true,true,"There was an error with your password");
         });
     }
 

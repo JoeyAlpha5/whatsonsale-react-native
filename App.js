@@ -15,6 +15,10 @@ import Brand from './src/Screens/Brand';
 // post and retailer screen
 import ViewPost from './src/Screens/ViewPost';
 import ViewRetailer from './src/Screens/ViewRetailer';
+// profile screen
+import ProfileSettings from './src/Components/ProfileSettings';
+import UpdatePassword from './src/Components/UpdatePassword';
+// 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -53,7 +57,9 @@ const App = () => {
   const ProfileStackScreen = ({navigation,route})=>{
     return(
       <ProfileStack.Navigator>
-            <ProfileStack.Screen name="profile" component={Profile} />
+            <ProfileStack.Screen name="profile" component={Profile} options={{headerRight:()=>(<Ionicons onPress={()=>navigation.navigate("settings")} name={"settings"} size={20} color={"#575757"} style={{marginRight:10}}/>)}}/>
+            <ProfileStack.Screen name="settings" component={ProfileSettings} />
+            <ProfileStack.Screen name="updatePassword" component={UpdatePassword} />
       </ProfileStack.Navigator>
     )
   };

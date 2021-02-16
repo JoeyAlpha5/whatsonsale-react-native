@@ -33,22 +33,8 @@ const Profile = ()=>{
 
 
             {renderTab()}
-            <Text onPress={()=>authentication.signOut()}>Sign Out</Text> 
         </View>
     )
 }
 
 export default Profile
-const style = StyleSheet.create({
-    top:{
-        width:'95%',
-        marginTop:20,
-        alignItems:'flex-start',
-        paddingBottom:20
-        
-    },
-    title:{
-        fontSize: 30,
-        fontWeight:'bold'
-    },
-})
