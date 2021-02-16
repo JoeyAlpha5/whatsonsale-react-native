@@ -1,5 +1,6 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, TextInput, StyleSheet, ActivityIndicator} from 'react-native';
+import { useFocusEffect} from '@react-navigation/native';
 import SearchFilter from '../../Components/SearchFilter';
 import SearchResult from '../../Components/SearchResult';
 import {authentication} from '../../firebase/firebase';
@@ -10,17 +11,17 @@ const Search = ({navigation,route})=>{
     const [Loading,setLoading] = useState(false);
     const [Category,setCategory] = useState('');
 
-    useEffect(()=>{
-        // get search results when category is updated
-        setLoading(true);
-        getSearchResults();
-    },[Category])
+    useFocusEffect(
+        React.useCallback(() => {
+            setLoading(true);
+            getSearchResults();
+          }, [Category])
+    )
 
     const getSearchResults = ()=>{
-        // setSearchInput(searchInput);
         if(SearchInput != "") {
             setLoading(true);
-            fetch("https://1b0eda077bf5.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
+            fetch("https://8589034e15a7.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
             .then(re=>re.json())
             .then(re=>{
                 setSearchResults(re.data)
@@ -38,7 +39,6 @@ const Search = ({navigation,route})=>{
     }
 
     const viewBrand = (brand)=>{
-        setSearchInput("");
         setLoading(false);
         setSearchResults([]);
         navigation.navigate('brand', {data:brand});
@@ -46,14 +46,13 @@ const Search = ({navigation,route})=>{
 
     return(
         <View>
-            {/* <PageHeader title="Search" color="#DA0E2F"/> */}
             <View style={style.top}>
                 <View style={style.innerTop}>
                     <Text style={style.title}>Search</Text>
                     <Text adjustsFontSizeToFit>Find your favourite brands</Text>
                     <View style={style.searchView}>
                         <View style={style.searchSection}>
-                            <TextInput onChangeText={text=>setSearchInput(text)} style={style.searchInputStyle} placeholder={"Search for brands."}/>
+                            <TextInput value={SearchInput} onChangeText={text=>setSearchInput(text)} style={style.searchInputStyle} placeholder={"Search for brands."}/>
                             <Ionicons onPress={getSearchResults} style={style.searchIcon} name="ios-search" size={20} color="#000"/>
                         </View>
                         <SearchFilter filter={applyFilter}/>

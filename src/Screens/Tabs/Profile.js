@@ -3,21 +3,24 @@ import {View,StyleSheet,Image,Text} from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import ProfileTab from '../../Components/ProfileTab';
 import FollowingTab from '../../Components/FollowingTab';
-import BasketTab from '../../Components/BasketTab';
+import Wallet from '../../Components/Wallet';
 import {authentication} from '../../firebase/firebase';
 
-const Profile = ()=>{
-    const buttons = ['Following','Profile',"Basket"]
+const Profile = ({navigation})=>{
+    const buttons = ['Following','Profile',"Messenger","Wallet"]
     const [index,setIndex] = useState(1);
 
     const renderTab = ()=>{
         if(index == 0){
-            return <FollowingTab/>
+            return <FollowingTab viewBrand={(brand)=>viewBrand(brand)}/>
         }else if(index == 1){
             return <ProfileTab/>
         }else{
-            return <BasketTab/>
+            return <Wallet/>
         }
+    }
+    const viewBrand = (brand)=>{
+        navigation.navigate('brand', {data:brand});
     }
 
     return(

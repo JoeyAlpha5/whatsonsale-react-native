@@ -14,15 +14,18 @@ import Profile from './src/Screens/Tabs/Profile';
 import Brand from './src/Screens/Brand';
 // post and retailer screen
 import ViewPost from './src/Screens/ViewPost';
-import ViewRetailer from './src/Screens/ViewRetailer';
 // profile screen
 import ProfileSettings from './src/Components/ProfileSettings';
 import UpdatePassword from './src/Components/UpdatePassword';
+// basket
+import BasketTab from './src/Screens/Tabs/BasketTab';
+
 // 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 const App = () => {
   const [signedIn, setSignedIn] = useState(true);
@@ -37,19 +40,20 @@ const App = () => {
   const HomeStackScreen = ({navigation,route})=>{
     return(
       <HomeStack.Navigator>
-            <HomeStack.Screen  name="home" initialParams={{ authenticate: signIn }} component={Home} options={{headerShown:true}}/>
+            <HomeStack.Screen  name="home" initialParams={{ authenticate: signIn }} component={Home} options={{headerRight:()=>(<Ionicons onPress={()=>navigation.navigate("search")} name={"search"} size={20} color={"#575757"} style={{marginRight:10}}/>)}}/>
+            <HomeStack.Screen  name="search" component={Search}/>
+            <BasketStack.Screen name="brand" component={Brand}/>
             <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:true}}/>
       </HomeStack.Navigator>
     )
   };
 
-  const SearchStack = createStackNavigator();
-  const SearchStackScreen = ({navigation,route})=>{
+  const BasketStack = createStackNavigator();
+  const BasketStackScreen = ({navigation,route})=>{
     return(
-      <SearchStack.Navigator>
-            <SearchStack.Screen name="search" component={Search} />
-            <SearchStack.Screen  name="brand" component={Brand} options={({ route }) => ({ title: route.params.data.name })}/>
-      </SearchStack.Navigator>
+      <BasketStack.Navigator>
+            <BasketStack.Screen name="basket" component={BasketTab}/>
+      </BasketStack.Navigator>
     )
   };
 
@@ -57,9 +61,10 @@ const App = () => {
   const ProfileStackScreen = ({navigation,route})=>{
     return(
       <ProfileStack.Navigator>
-            <ProfileStack.Screen name="profile" component={Profile} options={{headerRight:()=>(<Ionicons onPress={()=>navigation.navigate("settings")} name={"settings"} size={20} color={"#575757"} style={{marginRight:10}}/>)}}/>
+            <ProfileStack.Screen name="profile" component={Profile} options={{headerRight:()=>(<Feather onPress={()=>navigation.navigate("settings")} name={"settings"} size={20} color={"#575757"} style={{marginRight:10}}/>)}}/>
             <ProfileStack.Screen name="settings" component={ProfileSettings} />
             <ProfileStack.Screen name="updatePassword" component={UpdatePassword} />
+            <ProfileStack.Screen name="brand" component={Brand}/>
       </ProfileStack.Navigator>
     )
   };
@@ -93,17 +98,17 @@ const App = () => {
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
                 if (route.name === 'home') {
-                  iconName = focused ? 'home': 'home';
-                } else if (route.name === 'search') {
-                  iconName = focused ? 'search' : 'search';
+                  iconName = focused ? 'home': 'home-outline';
+                } else if (route.name === 'basket') {
+                  iconName = focused ? 'ios-cart' : 'ios-cart-outline';
                 }
                 else if (route.name === 'news') {
-                  iconName = focused ? 'message-circle' : 'message-circle';
+                  iconName = focused ? 'newspaper' : 'newspaper-outline';
                 }else if (route.name === 'profile') {
-                  iconName = focused ? 'user' : 'user';
+                  iconName = focused ? 'person' : 'person-outline';
                 }
                 // You can return any component that you like here!
-                return <Ionicons name={iconName} size={20} color={color} />;
+                return <Ionicons name={iconName} size={25} color={color} />;
               },
             })}
 
@@ -124,7 +129,7 @@ const App = () => {
             }}
           >
             <SignedIn.Screen name={"home"} component={HomeStackScreen}/>
-            <SignedIn.Screen name={"search"} component={SearchStackScreen}/>
+            <SignedIn.Screen name={"basket"} component={BasketStackScreen}/>
             <SignedIn.Screen name={"profile"} component={ProfileStackScreen}/>
             <SignedIn.Screen name={"news"} component={NewsStackScreen}/>
           </SignedIn.Navigator>

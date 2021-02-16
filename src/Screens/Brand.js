@@ -27,7 +27,7 @@ const Brand = ({navigation,route})=>{
             setFollowing(false);
             setFollowersCount(FollowersCount-1);
         }
-        fetch("https://e862cf5ddc3e.ngrok.io/api/followBrand?id="+brand.id+"&userId="+authentication.currentUser.uid)
+        fetch("https://8589034e15a7.ngrok.io/api/followBrand?id="+brand.id+"&userId="+authentication.currentUser.uid)
         .then(re=>re.json())
         .then(re=>{
             // console.log(re);
