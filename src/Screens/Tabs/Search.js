@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {View, Text, TextInput, StyleSheet, ActivityIndicator} from 'react-native';
 import { useFocusEffect} from '@react-navigation/native';
 import SearchFilter from '../../Components/SearchFilter';
@@ -12,7 +12,7 @@ const Search = ({navigation,route})=>{
     const [Category,setCategory] = useState('');
 
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
             setLoading(true);
             getSearchResults();
           }, [Category])
@@ -21,7 +21,7 @@ const Search = ({navigation,route})=>{
     const getSearchResults = ()=>{
         if(SearchInput != "") {
             setLoading(true);
-            fetch("https://8589034e15a7.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
+            fetch("https://f86d6cde6223.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
             .then(re=>re.json())
             .then(re=>{
                 setSearchResults(re.data)

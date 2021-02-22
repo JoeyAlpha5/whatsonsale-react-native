@@ -12,7 +12,7 @@ const FollowingTab = (props)=>{
 
     const getFollowedBrands = async ()=>{
         setLoader(true);
-        fetch("https://8589034e15a7.ngrok.io/api/getFollowing?userId="+authentication.currentUser.uid)
+        fetch("https://ff6e3061d812.ngrok.io/api/getFollowing?userId="+authentication.currentUser.uid)
         .then(re=>re.json())
         .then(re=>{
             setLoader(false);

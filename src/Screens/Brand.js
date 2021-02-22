@@ -1,19 +1,23 @@
 import React, {useState,useEffect} from 'react';
-import {View, Text, StyleSheet,Image,useWindowDimensions,Linking} from 'react-native';
+import {View, Text, StyleSheet,Image,Linking,ActivityIndicator,useWindowDimensions} from 'react-native';
 import { Button } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {authentication} from '../firebase/firebase';
+import BrandPosts from '../Components/BrandPosts';
 
 const Brand = ({navigation,route})=>{
     const [brand,setBrand] = useState(route.params.data);
     const [PostCount,setPostCount] = useState(0);
     const [following,setFollowing] = useState(false);
+    const [posts,setPosts] = useState([]);
+    const [gotPosts,setGotPosts] = useState(false);
     const [FollowersCount,setFollowersCount] = useState(0);
     const width = useWindowDimensions().width;
+    const userId = authentication.currentUser.uid;
 
     useEffect(()=>{
         // get the number of posts and followers
-        console.log(brand)
+        getBrandPosts();
         setFollowing(brand.following);
         setPostCount(brand.post_count);
         setFollowersCount(brand.follower_count);
@@ -27,12 +31,27 @@ const Brand = ({navigation,route})=>{
             setFollowing(false);
             setFollowersCount(FollowersCount-1);
         }
-        fetch("https://8589034e15a7.ngrok.io/api/followBrand?id="+brand.id+"&userId="+authentication.currentUser.uid)
+        fetch("https://f86d6cde6223.ngrok.io/api/followBrand?id="+brand.id+"&userId="+userId)
         .then(re=>re.json())
         .then(re=>{
             // console.log(re);
         })
     }
+
+    const getBrandPosts = ()=>{
+        fetch("https://f86d6cde6223.ngrok.io/api/getBrandPosts?brandId="+brand.id+"&userId="+userId)
+        .then(re=>re.json())
+        .then(re=>{
+            setPosts(re.data);
+            setGotPosts(true);
+        })
+    }
+
+    const viewPost = (post)=>{
+        var post_index = posts.indexOf(post);
+        navigation.navigate("post",{data:{"post":post,"brand":brand,"index":post_index,"updatePostArray":getBrandPosts}});
+    }
+
 
     return(
         <View style={style.page}>
@@ -67,6 +86,15 @@ const Brand = ({navigation,route})=>{
                     <Text style={{color:'#DA0E2F',textDecorationLine:'underline',fontSize:13}}>Visit website</Text>
                 </TouchableOpacity>
             </View>
+
+            <View style={style.postsSection}>
+                    {gotPosts == false?
+                        <ActivityIndicator style={{marginTop:10}} size="small" color="#000000"/>:
+                        <BrandPosts data={posts} viewPost={viewPost}/>
+                    }
+            </View>
+
+
         </View>
     )
 }
@@ -112,9 +140,23 @@ const style = StyleSheet.create({
         alignItems:'center',
         flexDirection:'row',
     },
+    postsSection:{
+        width:'95%',
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+    },
     statTitle:{
         fontSize:20,
         fontWeight:'bold',
+    },
+    post:{
+        marginLeft:5,
+        marginTop:15,
+        backgroundColor:'rgba(0, 0, 0, 0.06)',
+        resizeMode:'cover',
+        borderRadius:10,
+        alignItems:'flex-start'
     }
 
 })

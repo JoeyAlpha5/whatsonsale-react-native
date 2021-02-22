@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
-import PageHeader from '../../Components/Header';
+import {View, Text,StatusBar} from 'react-native';
 import {authentication} from '../../firebase/firebase';
 const Home = ({navigation,route})=>{
     useEffect(()=>{
@@ -13,7 +12,7 @@ const Home = ({navigation,route})=>{
     },[]);
     return(
         <View>
-            {/* <PageHeader title="Home" color="#DA0E2F"/> */}
+            <StatusBar  backgroundColor="#fff" barStyle="dark-content"/>
             <Text>Home</Text>
         </View>
     )

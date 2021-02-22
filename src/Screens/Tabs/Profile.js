@@ -7,7 +7,7 @@ import Wallet from '../../Components/Wallet';
 import {authentication} from '../../firebase/firebase';
 
 const Profile = ({navigation})=>{
-    const buttons = ['Following','Profile',"Messenger","Wallet"]
+    const buttons = ['Following','Profile',"Sharebox","Wallet"]
     const [index,setIndex] = useState(1);
 
     const renderTab = ()=>{

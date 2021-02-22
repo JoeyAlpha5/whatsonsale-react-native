@@ -42,7 +42,7 @@ const App = () => {
       <HomeStack.Navigator>
             <HomeStack.Screen  name="home" initialParams={{ authenticate: signIn }} component={Home} options={{headerRight:()=>(<Ionicons onPress={()=>navigation.navigate("search")} name={"search"} size={20} color={"#575757"} style={{marginRight:10}}/>)}}/>
             <HomeStack.Screen  name="search" component={Search}/>
-            <BasketStack.Screen name="brand" component={Brand}/>
+            <BasketStack.Screen name="brand" component={Brand}  options={({ route }) => ({ title: route.params.data.name })}/>
             <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:true}}/>
       </HomeStack.Navigator>
     )
@@ -64,7 +64,8 @@ const App = () => {
             <ProfileStack.Screen name="profile" component={Profile} options={{headerRight:()=>(<Feather onPress={()=>navigation.navigate("settings")} name={"settings"} size={20} color={"#575757"} style={{marginRight:10}}/>)}}/>
             <ProfileStack.Screen name="settings" component={ProfileSettings} />
             <ProfileStack.Screen name="updatePassword" component={UpdatePassword} />
-            <ProfileStack.Screen name="brand" component={Brand}/>
+            <ProfileStack.Screen name="brand" component={Brand}  options={({ route }) => ({ title: route.params.data.name })}/>
+            <ProfileStack.Screen name="post" component={ViewPost}/>
       </ProfileStack.Navigator>
     )
   };
@@ -82,10 +83,10 @@ const App = () => {
     return(
       <NavigationContainer>
           <SignedOut.Navigator>
-            <SignedOut.Screen name={"getStarted"} component={GetStarted} options={{headerShown:false}}/>
-            <SignedOut.Screen name={"signIn"} initialParams={{ authenticate: signIn }} component={SignIn} options={{headerShown:false}}/>
-            <SignedOut.Screen name={"register"} initialParams={{ authenticate: signIn }} component={Register} options={{headerShown:false}}/>
-            <SignedOut.Screen name={"passwordReset"} component={PasswordReset} options={{headerShown:false}}/>
+            <SignedOut.Screen name={"getStarted"} component={GetStarted} options={{headerShown:false,title:'Get Started'}}/>
+            <SignedOut.Screen name={"signIn"} initialParams={{ authenticate: signIn }} options={{headerStyle:{backgroundColor:'#DA0E2F'},title:"Sign In",headerTintColor:'#fff'}} component={SignIn}/>
+            <SignedOut.Screen name={"register"} initialParams={{ authenticate: signIn }} component={Register} options={{headerStyle:{backgroundColor:'#DA0E2F'},title:"Sign Up",headerTintColor:'#fff'}}/>
+            <SignedOut.Screen name={"passwordReset"} component={PasswordReset} options={{headerStyle:{backgroundColor:'#DA0E2F'},title:"Reset Password",headerTintColor:'#fff'}}/>
           </SignedOut.Navigator>
       </NavigationContainer>
     );

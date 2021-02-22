@@ -21,7 +21,7 @@ const ProfileTab = ()=>{
     },[])
 
     const getProfile = async ()=>{
-        fetch("https://8589034e15a7.ngrok.io/api/getAccount?userId="+authentication.currentUser.uid)
+        fetch("https://ff6e3061d812.ngrok.io/api/getAccount?userId="+authentication.currentUser.uid)
         .then(re=>re.json())
         .then(re=>{
             setProfile(true);
@@ -58,7 +58,7 @@ const ProfileTab = ()=>{
         var current_user = authentication.currentUser;
         current_user.updateEmail(UserEmail)
         .then(()=>{
-            fetch('https://8589034e15a7.ngrok.io/api/updateAccount', {
+            fetch('https://ff6e3061d812.ngrok.io/api/updateAccount', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
