@@ -14,6 +14,8 @@ import Profile from './src/Screens/Tabs/Profile';
 import Brand from './src/Screens/Brand';
 // post and retailer screen
 import ViewPost from './src/Screens/ViewPost';
+import Products from './src/Screens/Products';
+import Locations from './src/Screens/Locations';
 // profile screen
 import ProfileSettings from './src/Components/ProfileSettings';
 import UpdatePassword from './src/Components/UpdatePassword';
@@ -44,6 +46,8 @@ const App = () => {
             <HomeStack.Screen  name="search" component={Search}/>
             <BasketStack.Screen name="brand" component={Brand}  options={({ route }) => ({ title: route.params.data.name })}/>
             <HomeStack.Screen name="post" component={ViewPost} options={{headerShown:true}}/>
+            <HomeStack.Screen name="locations" component={Locations} options={{headerShown:true}}/>
+            <HomeStack.Screen name="products" component={Products} options={{headerShown:true}}/>
       </HomeStack.Navigator>
     )
   };
@@ -66,6 +70,8 @@ const App = () => {
             <ProfileStack.Screen name="updatePassword" component={UpdatePassword} />
             <ProfileStack.Screen name="brand" component={Brand}  options={({ route }) => ({ title: route.params.data.name })}/>
             <ProfileStack.Screen name="post" component={ViewPost}/>
+            <HomeStack.Screen name="locations" component={Locations} options={{headerShown:true}}/>
+            <HomeStack.Screen name="products" component={Products} options={{headerShown:true}}/>
       </ProfileStack.Navigator>
     )
   };

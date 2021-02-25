@@ -7,16 +7,16 @@ import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
 
 
-const ViewPost = ({navigation,route})=>{
+const Post = (props)=>{
     const [item,setItem] = useState({"brand":{},"post":{}});
     const [catalogue,setCatalogue] = useState([]);
     const [paused,setPaused] = useState(true);
     const width = useWindowDimensions().width;
 
     useEffect(()=>{
-        setItem(route.params.data);
-        if(route.params.data.post.catalogue.length != 0 ){
-            setCatalogue(JSON.parse(route.params.data.post.catalogue));
+        setItem(props.data);
+        if(props.data.post.catalogue.length != 0 ){
+            setCatalogue(JSON.parse(props.data.post.catalogue));
         }
         // console.log(Item);
     },[]);
@@ -31,7 +31,7 @@ const ViewPost = ({navigation,route})=>{
             new_item.post.likes_count = new_item.post.likes_count + 1;
         }
         // update database
-        fetch('https://501af1adc866.ngrok.io/api/postLike', {
+        fetch('https://543bba26ff28.ngrok.io/api/postLike', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -41,7 +41,8 @@ const ViewPost = ({navigation,route})=>{
         .then(re=>re.json())
         .then(re=>{
             // update brand's post array
-            route.params.data.updatePostArray();
+            // props.data.updatePostArray();
+            console.log("success")
         })
 
         // merge state change
@@ -74,19 +75,19 @@ const ViewPost = ({navigation,route})=>{
                 {/* top section of post */}
                 <View style={style.postTopSection}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
-                        <Image style={style.image} source={{uri:item.brand.logo}} />
+                        <TouchableOpacity onPress={()=>props.viewBrand(item.brand)}><Image style={style.image} source={{uri:item.brand.logo}} /></TouchableOpacity>
                         <View style={{marginLeft:15}}>
-                            <Text style={{fontWeight:'bold'}}>{item.brand.name}</Text>
+                            <TouchableOpacity onPress={()=>props.viewBrand(item.brand)}><Text style={{fontWeight:'bold'}}>{item.brand.name}</Text></TouchableOpacity>
                             <Text style={{color:'#575757',fontSize:11}}>{dateFormat(item.post.date, "mmmm dS, yyyy")}</Text>
                         </View>
                     </View>
                     <View style={{marginRight:15,flexDirection:'row',alignItems:'center'}}>
                         <View style={{alignItems:'center',marginRight:5}}>
-                            <Ionicons name="location-outline" size={20}/>
+                            <TouchableOpacity onPress={()=>props.viewLocations(item.post)}><Ionicons name="location-outline" size={20}/></TouchableOpacity>
                             <Text></Text>
                         </View>
                         <View style={{alignItems:'center'}}>
-                            <Ionicons name="cart-outline" size={20}/>
+                            <TouchableOpacity onPress={()=>props.viewProducts(item.post)}><Ionicons name="cart-outline" size={20}/></TouchableOpacity>
                             <Text>{item.post.products_count}</Text>
                         </View>
                     </View>
@@ -109,7 +110,7 @@ const ViewPost = ({navigation,route})=>{
                             {/* if post has catalogue render swiper if not just render the post cover */}
                             {catalogue.length > 0?
                                 (
-                                    <Swiper prevButton={<></>} nextButton={<></>} width={width*0.90} height={width*0.90}  loadMinimalSize={0} autoplay={true} loadMinimal={true} autoplayTimeout={20} showsButtons={false} dotColor={'#575757'} activeDotColor={'#fff'}  style={style.wrapper} showsButtons={true}>
+                                    <Swiper prevButton={<></>} nextButton={<></>} width={width*0.90} height={width*0.90}  loadMinimalSize={0} autoplay={false} loadMinimal={true} autoplayTimeout={20} showsButtons={false} dotColor={'#575757'} activeDotColor={'#fff'}  style={style.wrapper} showsButtons={true}>
                                         <Image style={[style.postImage,{width:width*0.90,height:width*0.90}]} source={{uri:item.post.cover}}/>
                                         {
                                             catalogue.map(slide=>{
@@ -151,7 +152,7 @@ const ViewPost = ({navigation,route})=>{
         </View>
     );
 }
-export default ViewPost
+export default Post
 const style = StyleSheet.create({
     view:{
         justifyContent:'center',
@@ -163,7 +164,7 @@ const style = StyleSheet.create({
         // height:500,
         paddingBottom:25,
         backgroundColor:'#fff',
-        marginTop:20,
+        marginTop:10,
         borderRadius:10,
         shadowOffset: {
             width: 0,

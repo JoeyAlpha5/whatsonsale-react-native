@@ -21,7 +21,7 @@ const Search = ({navigation,route})=>{
     const getSearchResults = ()=>{
         if(SearchInput != "") {
             setLoading(true);
-            fetch("https://f86d6cde6223.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
+            fetch("https://543bba26ff28.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
             .then(re=>re.json())
             .then(re=>{
                 setSearchResults(re.data)

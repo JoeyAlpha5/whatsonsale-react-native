@@ -24,6 +24,7 @@ const Brand = ({navigation,route})=>{
     },[])
 
     const follow = (type)=>{
+        route.params.updateFollowing();
         if(type == "follow"){
             setFollowing(true);
             setFollowersCount(FollowersCount+1);
@@ -31,7 +32,7 @@ const Brand = ({navigation,route})=>{
             setFollowing(false);
             setFollowersCount(FollowersCount-1);
         }
-        fetch("https://f86d6cde6223.ngrok.io/api/followBrand?id="+brand.id+"&userId="+userId)
+        fetch("https://543bba26ff28.ngrok.io/api/followBrand?id="+brand.id+"&userId="+userId)
         .then(re=>re.json())
         .then(re=>{
             // console.log(re);
@@ -39,7 +40,7 @@ const Brand = ({navigation,route})=>{
     }
 
     const getBrandPosts = ()=>{
-        fetch("https://f86d6cde6223.ngrok.io/api/getBrandPosts?brandId="+brand.id+"&userId="+userId)
+        fetch("https://543bba26ff28.ngrok.io/api/getBrandPosts?brandId="+brand.id+"&userId="+userId)
         .then(re=>re.json())
         .then(re=>{
             setPosts(re.data);
