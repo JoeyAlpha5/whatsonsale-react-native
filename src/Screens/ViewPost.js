@@ -31,7 +31,7 @@ const ViewPost = ({navigation,route})=>{
             new_item.post.likes_count = new_item.post.likes_count + 1;
         }
         // update database
-        fetch('https://501af1adc866.ngrok.io/api/postLike', {
+        fetch('https://whatsonsale-test.herokuapp.com/api/postLike', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

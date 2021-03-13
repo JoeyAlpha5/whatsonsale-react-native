@@ -28,7 +28,7 @@ const Home = ({navigation,route})=>{
         if (resetFeed == true){
             feed_count = 0;
         }
-        fetch("https://543bba26ff28.ngrok.io/api/getFeed?userId="+userId+"&feedCount="+feed_count)
+        fetch("https://whatsonsale-test.herokuapp.com/api/getFeed?userId="+userId+"&feedCount="+feed_count)
         .then(re=>re.json())
         .then(re=>{
             setRefreshing(false);
@@ -38,24 +38,8 @@ const Home = ({navigation,route})=>{
             }else{
                 if(resetFeed == true){
                     setFeed(re.data);
-                    // set posts ids to be used to identify duplicates
-                    // var post_ids = [];
-                    // for(var count = 0; count < re.data.length; count++){
-                    //     post_ids.push(re.data[count].post.postId);
-                    // }
-                    // setPostIds(post_ids);
                 }else{
-                    // resolve duplicates
-                    // var new_feed = [];
-                    // var post_ids = [];
-                    // for(var count = 0; count < re.data.length; count++){
-                    //     if(!postIds.includes(re.data[count].post.postId)){
-                    //         new_feed.push(re.data[count]);
-                    //         post_ids.push(re.data[count].post.postId)
-                    //     }
-                    // }
                     setFeed([...feed,...re.data])
-                    // setPostIds([...postIds,...post_ids]);
                 }
             }
         });
@@ -95,6 +79,7 @@ const Home = ({navigation,route})=>{
         setMorePostToLoad(true);
         setGotFeed(false);
         getFeed(authentication.currentUser.uid,true);
+        // onRefresh();
     }
 
     return(
@@ -114,9 +99,9 @@ const Home = ({navigation,route})=>{
                         showsVerticalScrollIndicator ={false}
                         onEndReached={getMore}
                         onEndReachedThreshold={1}
-                        ListFooterComponent={morePostToLoad == true ? <ActivityIndicator style={{marginTop:5}} size="small" color="#000000"/>:<View style={{marginTop:10,marginBottom:30,justifyContent:'center',alignItems:'center'}}><Text style={{fontSize:12,color:"#575757"}}>You've viewed all posts from your favourite brands.</Text></View>}
+                        ListFooterComponent={morePostToLoad == true ? <ActivityIndicator style={{marginTop:5}} size="small" color="#000000"/>:<View style={{marginTop:10,marginBottom:30,justifyContent:'center',alignItems:'center'}}><Text style={{fontSize:12,color:"#575757"}}>No posts to show! follow more brands</Text></View>}
                         refreshControl={<RefreshControl colors={['#000000']} refreshing={Refreshing} onRefresh={onRefresh}/>} 
-                        keyExtractor={( item,index ) => {return item.post.postId.toFixed()} }
+                        keyExtractor={( item,index ) => {return index.toFixed()} }
                         renderItem={({item,index})=>(
                             <Post data={item} viewBrand={viewBrand} viewProducts={viewProducts} viewLocations={viewLocations}/>
                         )}

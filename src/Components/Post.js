@@ -31,7 +31,7 @@ const Post = (props)=>{
             new_item.post.likes_count = new_item.post.likes_count + 1;
         }
         // update database
-        fetch('https://543bba26ff28.ngrok.io/api/postLike', {
+        fetch('https://whatsonsale-test.herokuapp.com/api/postLike', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -87,7 +87,15 @@ const Post = (props)=>{
                             <Text></Text>
                         </View>
                         <View style={{alignItems:'center'}}>
-                            <TouchableOpacity onPress={()=>props.viewProducts(item.post)}><Ionicons name="cart-outline" size={20}/></TouchableOpacity>
+                            {item.post.products_count> 0?
+                                (
+                                 <TouchableOpacity onPress={()=>props.viewProducts(item.post)}><Ionicons name="cart-outline" size={20}/></TouchableOpacity>
+                                )
+                                :
+                                (
+                                 <Ionicons name="cart-outline" size={20}/>
+                                )
+                            }
                             <Text>{item.post.products_count}</Text>
                         </View>
                     </View>

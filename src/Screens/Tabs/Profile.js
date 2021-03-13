@@ -7,7 +7,7 @@ import Wallet from '../../Components/Wallet';
 import {authentication} from '../../firebase/firebase';
 
 const Profile = ({navigation})=>{
-    const buttons = ['Following','Profile',"Sharebox","Wallet"]
+    const buttons = ['Following','Profile',"Sharebox"]
     const [index,setIndex] = useState(1);
 
     const renderTab = ()=>{
@@ -20,7 +20,12 @@ const Profile = ({navigation})=>{
         }
     }
     const viewBrand = (brand)=>{
-        navigation.navigate('brand', {data:brand});
+        navigation.navigate('brand', {data:brand, updateFollowing:updateFollowing});
+    }
+
+    // function that's executed when you click follow button on retailer profile
+    const updateFollowing = ()=>{
+        // console.log("update following on profile tab");
     }
 
     return(

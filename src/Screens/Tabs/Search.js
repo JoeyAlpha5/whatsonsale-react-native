@@ -21,7 +21,7 @@ const Search = ({navigation,route})=>{
     const getSearchResults = ()=>{
         if(SearchInput != "") {
             setLoading(true);
-            fetch("https://543bba26ff28.ngrok.io/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
+            fetch("https://whatsonsale-test.herokuapp.com/api/searchPage?searchInput="+SearchInput+"&searchCategory="+Category+"&userId="+authentication.currentUser.uid)
             .then(re=>re.json())
             .then(re=>{
                 setSearchResults(re.data)
@@ -41,7 +41,12 @@ const Search = ({navigation,route})=>{
     const viewBrand = (brand)=>{
         setLoading(false);
         setSearchResults([]);
-        navigation.navigate('brand', {data:brand});
+        navigation.navigate('brand', {data:brand,updateFollowing:updateFollowing});
+    }
+
+    // function that's executed when you click follow button
+    const updateFollowing = ()=>{
+        // console.log("update following on profile tab");
     }
 
     return(

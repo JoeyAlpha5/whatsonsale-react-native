@@ -17,11 +17,12 @@ const ProfileTab = ()=>{
     const [UserMobile,setUserMobile] = useState("");
     const [UserAcceptsBaskets,setUserAcceptsBaskets] = useState(false);
     useEffect(()=>{
-        renderProfileFromLocalStorage();
+        // renderProfileFromLocalStorage();
+        getProfile();
     },[])
 
     const getProfile = async ()=>{
-        fetch("https://ff6e3061d812.ngrok.io/api/getAccount?userId="+authentication.currentUser.uid)
+        fetch("https://whatsonsale-test.herokuapp.com/api/getAccount?userId="+authentication.currentUser.uid)
         .then(re=>re.json())
         .then(re=>{
             setProfile(true);
@@ -58,7 +59,7 @@ const ProfileTab = ()=>{
         var current_user = authentication.currentUser;
         current_user.updateEmail(UserEmail)
         .then(()=>{
-            fetch('https://501af1adc866.ngrok.io/api/updateAccount', {
+            fetch('https://whatsonsale-test.herokuapp.com/api/updateAccount', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

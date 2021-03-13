@@ -28,6 +28,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+//currency
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 
 const App = () => {
   const [signedIn, setSignedIn] = useState(true);

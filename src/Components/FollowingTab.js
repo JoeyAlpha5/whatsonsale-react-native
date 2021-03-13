@@ -7,38 +7,40 @@ const FollowingTab = (props)=>{
     const [brands,setBrands] = useState([]);
     const [loader,setLoader] = useState(false);
     useEffect(()=>{
-        getFollowedBrandsFromStorage();
+        // getFollowedBrandsFromStorage();
+        getFollowedBrands();
     },[])
 
     const getFollowedBrands = async ()=>{
         setLoader(true);
-        fetch("https://501af1adc866.ngrok.io/api/getFollowing?userId="+authentication.currentUser.uid)
+        fetch("https://whatsonsale-test.herokuapp.com/api/getFollowing?userId="+authentication.currentUser.uid)
         .then(re=>re.json())
         .then(re=>{
             setLoader(false);
             setBrands(re.data);
-            AsyncStorage.setItem('following', JSON.stringify(re.data));
+            // AsyncStorage.setItem('following', JSON.stringify(re.data));
         });
     }
 
 
-    const getFollowedBrandsFromStorage = async ()=>{
-        setLoader(true);
-        try{
-            // getFollowedBrands();
-            const following = await AsyncStorage.getItem('following');
-            if(following != null && JSON.parse(following).length != 0){
-                const json_following = JSON.parse(following);
-                setBrands(json_following)
-                setLoader(false);
-            }else{
-                getFollowedBrands();
-            }
+    // const getFollowedBrandsFromStorage = async ()=>{
+    //     setLoader(true);
+    //     try{
+    //         // getFollowedBrands();
+    //         const following = await AsyncStorage.getItem('following');
+    //         if(following != null && JSON.parse(following).length != 0){
+    //             const json_following = JSON.parse(following);
+    //             setBrands(json_following)
+    //             setLoader(false);
+    //             getFollowedBrands();
+    //         }else{
+    //             getFollowedBrands();
+    //         }
  
-        }catch{
-            getFollowedBrands();
-        }
-    }
+    //     }catch{
+    //         getFollowedBrands();
+    //     }
+    // }
 
 
     return(
