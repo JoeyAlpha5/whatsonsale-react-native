@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Text} from 'react-native';
 // auth screens
 import Register from './src/Screens/Auth/Register';
@@ -31,11 +31,20 @@ import Feather from 'react-native-vector-icons/Feather';
 //currency
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+// splash screen
+import SplashScreen from 'react-native-splash-screen'
 
 const App = () => {
   const [signedIn, setSignedIn] = useState(true);
   const SignedOut = createStackNavigator();
   const SignedIn = createBottomTabNavigator();
+
+
+  // disable splash screen
+  useEffect(()=>{
+    SplashScreen.hide();
+  },[])
+
   // update sign in state
   const signIn = (val) =>{
     setSignedIn(val);
