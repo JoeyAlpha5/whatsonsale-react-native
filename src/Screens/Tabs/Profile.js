@@ -12,6 +12,16 @@ const Profile = ({navigation})=>{
     const [index,setIndex] = useState(1);
     const [profileImage,setProfileImage] = useState("");
     const options = {mediaType:"photo"};
+    const aws_url = "https://whatsonsale-development.s3.amazonaws.com/";
+
+    useEffect(()=>{
+        var user_id = authentication.currentUser.uid;
+        fetch(`https://whatsonsale-test.herokuapp.com/api/getProfileImage?userId=${user_id}`)
+        .then(re=>re.json())
+        .then(re=>{
+            setProfileImage(re.profile_image);
+        })
+    },[profileImage])
 
     const renderTab = ()=>{
         if(index == 0){
@@ -39,7 +49,7 @@ const Profile = ({navigation})=>{
                 type:obj.type,
                 uri: Platform.OS === "android" ? obj.uri : obj.uri.replace("file://", "")
             }
-            data.append("photo",photo);
+            data.append("profile_image",photo);
             data.append("userId", authentication.currentUser.uid);
             // update profile image
             fetch('https://whatsonsale-test.herokuapp.com/api/updateProfileImage', {
@@ -48,14 +58,14 @@ const Profile = ({navigation})=>{
             })
             .then(re=>re.json())
             .then(re=>{
-                console.log(re);
+                setProfileImage(re.profile_image);
             })
         }
     }
 
     return(
         <View style={{flex:1,width:'100%',alignItems:'center'}}>
-            <TouchableOpacity onPress={()=>launchImageLibrary(options, updateProilePic)}><Image style={{width:80, height:80, borderRadius:40,backgroundColor:'rgba(0, 0, 0, 0.06)', marginTop:20}}/></TouchableOpacity>
+            <TouchableOpacity onPress={()=>launchImageLibrary(options, updateProilePic)}><Image source={{uri:aws_url+profileImage}} style={{width:80, height:80, borderRadius:40,backgroundColor:'rgba(0, 0, 0, 0.06)', marginTop:20}}/></TouchableOpacity>
             <ButtonGroup
                 onPress={(i)=>setIndex(i)}
                 selectedIndex={index}

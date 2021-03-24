@@ -51,11 +51,17 @@ const ViewPost = ({navigation,route})=>{
         });
     }
 
-    const comment = ()=>{
-
+    // view post products
+    const viewProducts = (post)=>{
+        navigation.navigate("products",{data:post});
     }
 
-    const viewProducts  = ()=>{
+    // view store locatioons
+    const viewLocations = (post,brand_name)=>{
+        navigation.navigate("locations",{data:post,brandName:brand_name});
+    }
+
+    const comment = ()=>{
 
     }
 
@@ -82,11 +88,19 @@ const ViewPost = ({navigation,route})=>{
                     </View>
                     <View style={{marginRight:15,flexDirection:'row',alignItems:'center'}}>
                         <View style={{alignItems:'center',marginRight:5}}>
-                            <Ionicons name="location-outline" size={20}/>
+                        <TouchableOpacity onPress={()=>viewLocations(item.post,item.brand.name)}><Ionicons name="location-outline" size={20}/></TouchableOpacity>
                             <Text></Text>
                         </View>
                         <View style={{alignItems:'center'}}>
-                            <Ionicons name="cart-outline" size={20}/>
+                            {item.post.products_count> 0?
+                                (
+                                 <TouchableOpacity onPress={()=>viewProducts(item.post)}><Ionicons name="cart-outline" size={20}/></TouchableOpacity>
+                                )
+                                :
+                                (
+                                 <Ionicons name="cart-outline" size={20}/>
+                                )
+                            }
                             <Text>{item.post.products_count}</Text>
                         </View>
                     </View>
