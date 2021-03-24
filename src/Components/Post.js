@@ -83,7 +83,7 @@ const Post = (props)=>{
                     </View>
                     <View style={{marginRight:15,flexDirection:'row',alignItems:'center'}}>
                         <View style={{alignItems:'center',marginRight:5}}>
-                            <TouchableOpacity onPress={()=>props.viewLocations(item.post)}><Ionicons name="location-outline" size={20}/></TouchableOpacity>
+                            <TouchableOpacity onPress={()=>props.viewLocations(item.post,item.brand.name)}><Ionicons name="location-outline" size={20}/></TouchableOpacity>
                             <Text></Text>
                         </View>
                         <View style={{alignItems:'center'}}>

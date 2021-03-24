@@ -66,8 +66,8 @@ const Home = ({navigation,route})=>{
     }
 
     // view store locatioons
-    const viewLocations = (post)=>{
-        navigation.navigate("locations",{data:post});
+    const viewLocations = (post,brand_name)=>{
+        navigation.navigate("locations",{data:post,brandName:brand_name});
     }
 
     const viewBrand = (brand)=>{

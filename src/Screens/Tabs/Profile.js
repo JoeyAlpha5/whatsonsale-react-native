@@ -1,14 +1,17 @@
 import React,{useState,useEffect} from 'react';
-import {View,StyleSheet,Image,Text} from 'react-native';
+import {View,StyleSheet,Image,Text, TouchableOpacity,Platform} from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import ProfileTab from '../../Components/ProfileTab';
 import FollowingTab from '../../Components/FollowingTab';
 import Wallet from '../../Components/Wallet';
 import {authentication} from '../../firebase/firebase';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const Profile = ({navigation})=>{
-    const buttons = ['Following','Profile',"Sharebox"]
+    const buttons = ['Following','Profile',"Sharebox", "Wallet"]
     const [index,setIndex] = useState(1);
+    const [profileImage,setProfileImage] = useState("");
+    const options = {mediaType:"photo"};
 
     const renderTab = ()=>{
         if(index == 0){
@@ -28,9 +31,31 @@ const Profile = ({navigation})=>{
         // console.log("update following on profile tab");
     }
 
+    const updateProilePic = (obj)=>{
+        if(obj.fileName){
+            var data = new FormData();
+            var photo = {
+                name:obj.fileName,
+                type:obj.type,
+                uri: Platform.OS === "android" ? obj.uri : obj.uri.replace("file://", "")
+            }
+            data.append("photo",photo);
+            data.append("userId", authentication.currentUser.uid);
+            // update profile image
+            fetch('https://whatsonsale-test.herokuapp.com/api/updateProfileImage', {
+                method: 'POST',
+                body:data,
+            })
+            .then(re=>re.json())
+            .then(re=>{
+                console.log(re);
+            })
+        }
+    }
+
     return(
         <View style={{flex:1,width:'100%',alignItems:'center'}}>
-            <Image style={{width:80, height:80, borderRadius:40,backgroundColor:'rgba(0, 0, 0, 0.06)', marginTop:20}}/>
+            <TouchableOpacity onPress={()=>launchImageLibrary(options, updateProilePic)}><Image style={{width:80, height:80, borderRadius:40,backgroundColor:'rgba(0, 0, 0, 0.06)', marginTop:20}}/></TouchableOpacity>
             <ButtonGroup
                 onPress={(i)=>setIndex(i)}
                 selectedIndex={index}
