@@ -9,20 +9,14 @@ const Locations = ({navigation,route})=>{
     const [brandLocations,setBrandLocations] = useState([]);
     const [selectedLocation,setSelectedLocation] = useState(null);
     const [overlay,setOverlay] = useState(false);
-    const google_maps_location_api = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${route.params.brandName}&inputtype=textquery&fields=formatted_address,geometry,name&locationbias=circle:2000@${myLocation.latitude},${myLocation.longitude}&key=AIzaSyD7FkGPNnb-TnwiweIfGPgVGy3N3A0O6Mk`;
 
     useEffect(()=>{
         // check if location permission has been allowed on android
         if(Platform.OS == "android"){
             checkLocationPermission();
+        }else{
+            displayLocations();
         }
-        //get user's location and display on map
-        Geolocation.getCurrentPosition((position)=>{
-            var coordinates = {latitude:position.coords.latitude,longitude:position.coords.longitude,latitudeDelta: 0.0922,longitudeDelta: 0.0421};
-            setMyLocation(coordinates);
-        });
-        // get shop locations
-        getBrandLocations();
     },[])
 
     // open uber
@@ -32,20 +26,26 @@ const Locations = ({navigation,route})=>{
 
     }
 
-    // get brand locations
-    const getBrandLocations = ()=>{
-        fetch(google_maps_location_api)
-        .then(re=>re.json())
-        .then(re=>{
-            setBrandLocations(re.candidates);
-        })
+    const displayLocations = ()=>{
+        //get user's location and display on map
+        Geolocation.getCurrentPosition((position)=>{
+            var coordinates = {latitude:position.coords.latitude,longitude:position.coords.longitude,latitudeDelta: 0.0922,longitudeDelta: 0.0421};
+            setMyLocation(coordinates);
+            fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${position.coords.latitude},${position.coords.longitude}&radius=5000&keyword=${route.params.brandName}&key=AIzaSyD7FkGPNnb-TnwiweIfGPgVGy3N3A0O6Mk`)
+            .then(re=>re.json())
+            .then(re=>{
+                setBrandLocations(re.results);
+            })
+        });
     }
 
     // check location permission on android
     const checkLocationPermission = async ()=>{
-        const granted = await PermissionsAndroid.check( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION );
+        const granted = await PermissionsAndroid.request( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION );
         if(!granted){
             setOverlay(true);
+        }else{
+            displayLocations();
         }
     }
 
@@ -69,7 +69,7 @@ const Locations = ({navigation,route})=>{
                                 key={index}
                                 coordinate={{ latitude : location.geometry.location.lat , longitude : location.geometry.location.lng }}
                                 title={location.name}
-                                description={location.formatted_address}
+                                description={location.vicinity}
                                 onPress={()=>setSelectedLocation(location)}
                             />
                         )

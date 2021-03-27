@@ -189,6 +189,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				85BB99528A4BE67A12CD535B /* [CP] Copy Pods Resources */,
+				1AFFAC722ADCDEBB2AD913BE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -257,6 +258,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+		};
+		1AFFAC722ADCDEBB2AD913BE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-whatsonsale/Pods-whatsonsale-frameworks.sh",
+				"${PODS_ROOT}/CometChatCalls/Vendors/WebRTC.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/CometChatProCalls/CometChatProCalls.framework/CometChatProCalls",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CometChatProCalls.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-whatsonsale/Pods-whatsonsale-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		85BB99528A4BE67A12CD535B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

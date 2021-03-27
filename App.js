@@ -32,13 +32,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 // splash screen
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
   const [signedIn, setSignedIn] = useState(true);
   const SignedOut = createStackNavigator();
   const SignedIn = createBottomTabNavigator();
-
 
   // disable splash screen
   useEffect(()=>{

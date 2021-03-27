@@ -3,12 +3,12 @@ import {View,StyleSheet,Image,Text, TouchableOpacity,Platform} from 'react-nativ
 import { ButtonGroup } from 'react-native-elements';
 import ProfileTab from '../../Components/ProfileTab';
 import FollowingTab from '../../Components/FollowingTab';
-import Wallet from '../../Components/Wallet';
+import ChatList from '../../Components/Chats/ChatList';
 import {authentication} from '../../firebase/firebase';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 const Profile = ({navigation})=>{
-    const buttons = ['Following','Profile',"Sharebox", "Wallet"]
+    const buttons = ['Following','Profile',"Sharebox"]
     const [index,setIndex] = useState(1);
     const [profileImage,setProfileImage] = useState("");
     const options = {mediaType:"photo"};
@@ -29,7 +29,7 @@ const Profile = ({navigation})=>{
         }else if(index == 1){
             return <ProfileTab/>
         }else{
-            return <Wallet/>
+            return <ChatList/>
         }
     }
     const viewBrand = (brand)=>{

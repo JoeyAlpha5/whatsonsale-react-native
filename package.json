@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@cometchat-pro/react-native-calls": "^1.0.8",
+    "@cometchat-pro/react-native-chat": "^2.2.1",
     "@react-native-async-storage/async-storage": "^1.13.4",
     "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/masked-view": "^0.1.10",
@@ -30,6 +32,7 @@
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.17.1",
+    "react-native-select-contact": "^1.5.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-swiper": "^1.6.0",
     "react-native-vector-icons": "^8.0.0",
