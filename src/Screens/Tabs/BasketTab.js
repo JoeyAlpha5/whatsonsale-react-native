@@ -1,6 +1,6 @@
 import React, {useEffect,useState,useCallback} from 'react';
 import { useFocusEffect} from '@react-navigation/native';
-import {View, Text,ActivityIndicator,Platform,useWindowDimensions,StyleSheet,Image,FlatList,TouchableOpacity} from 'react-native';
+import {View, Text,ActivityIndicator,Platform,useWindowDimensions,StyleSheet,Image,FlatList,TouchableOpacity,ScrollView} from 'react-native';
 import {authentication} from '../../firebase/firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { PermissionsAndroid } from 'react-native';
@@ -13,6 +13,7 @@ const BasketTab = ()=>{
     const [preview,setPreview] = useState(1);
     const [selectedContact,setSelectedContact] = useState();
     const [contacts,setContacts] = useState();
+    const [shareMessage, setShareMessage] = useState("");
     let localization = {style:'currency', currency: 'ZAR'};
     let displayAsCurrency = (value) => new Intl.NumberFormat('en-ZA', localization).format(value);
     const aws_url = "https://whatsonsale-development.s3.amazonaws.com/";
@@ -26,7 +27,7 @@ const BasketTab = ()=>{
         fetch(`https://whatsonsale-test.herokuapp.com/api/getUserByNumber?user_number=${mobileNum}`)
         .then((re)=>re.json())
         .then((re)=>{
-            var data = JSON.parse(re.data);
+            var data = re.data;
             if(data.length == 0){
                 setContacts("none");
             }else{
@@ -50,6 +51,21 @@ const BasketTab = ()=>{
         .then(re=>{
             setProducts(re.data);
             setBasketExists(true);
+        })
+    }
+
+    const shareBasketWithFriend = (friendId)=>{
+        console.log(friendId);
+        fetch(`https://whatsonsale-test.herokuapp.com/api/shareBasket`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body:`userId=${authentication.currentUser.uid}&friendId=${friendId}`
+        })
+        .then(re=>re.json())
+        .then(re=>{
+            setShareMessage(re.response);
         })
     }
 
@@ -106,7 +122,7 @@ const BasketTab = ()=>{
     }
 
     return(
-        <View>
+        <ScrollView style={{flex:1}}>
             <Text style={{marginLeft:15,marginTop:15,fontSize:18,fontWeight:'bold',color:'#DA0E2F'}}>Basket</Text>
             <Text style={{marginLeft:15,marginTop:5,marginBottom:20,color:'#575757',width:'90%'}}>
                 Create a custom shopping basket of several 
@@ -165,6 +181,7 @@ const BasketTab = ()=>{
                 }
                             
                 {products.length == 0?null:<TouchableOpacity style={style.share} onPress={getContactsPermission}><Ionicons style={{marginLeft:5}} name="share-social-outline" size={22} color="#575757"/><Text style={{marginLeft:5}}>Share basket</Text></TouchableOpacity>}
+
                 <View style={{marginTop:10}}>
                     { selectedContact == undefined? 
                         null
@@ -172,7 +189,7 @@ const BasketTab = ()=>{
                         <View style={{width:width,justifyContent:'center',alignItems:'center'}}>
                             <View style={style.number}>
                                 <Text>0{selectedContact}</Text>
-                                <TouchableOpacity onPress={()=>{setSelectedContact(null); setContacts(null)}}><Text style={style.clear}>Clear</Text></TouchableOpacity>
+                                <TouchableOpacity onPress={()=>{setSelectedContact(null); setContacts(null);setShareMessage("")}}><Text style={style.clear}>Clear</Text></TouchableOpacity>
                             </View>
 
                             {contacts == undefined?
@@ -182,18 +199,26 @@ const BasketTab = ()=>{
                                 :
                                 contacts.map(item=>{
                                     return(
-                                        <View style={style.contactToShareWith}>
-                                            <View style={{flexDirection:'row',alignItems:'center',marginTop:30}}>
-                                                <Image source={{uri: aws_url+item.fields.profile_image}} style={style.image}/>
-                                                <View style={{marginLeft:15}}>
-                                                    <Text style={{fontWeight:'bold'}}>{item.fields.name}</Text>
-                                                    <Text style={{fontSize:12,color:'#575757'}}>0{item.fields.mobile_number}</Text>
+                                        <>
+                                            <View style={style.contactToShareWith}>
+                                                <View style={{flexDirection:'row',alignItems:'center',marginTop:30}}>
+                                                    <Image source={{uri: aws_url+item.profile_image}} style={style.image}/>
+                                                    <View style={{marginLeft:15}}>
+                                                        <Text style={{fontWeight:'bold'}}>{item.name}</Text>
+                                                        <Text style={{fontSize:12,color:'#575757'}}>0{item.mobile_number}</Text>
+                                                    </View>
                                                 </View>
+                                                <TouchableOpacity onPress={()=>shareBasketWithFriend(item.user_id)} style={{width:'100%',height:30,backgroundColor:'#DA0E2F',alignItems:'center',borderBottomRightRadius:10,borderBottomLeftRadius:10,justifyContent:'center'}}>
+                                                    <Text style={{color:'#fff',fontWeight:'bold'}}>Share</Text>
+                                                </TouchableOpacity>
                                             </View>
-                                            <TouchableOpacity style={{width:'100%',height:30,backgroundColor:'#DA0E2F',alignItems:'center',borderBottomRightRadius:10,borderBottomLeftRadius:10,justifyContent:'center'}}>
-                                                <Text style={{color:'#fff',fontWeight:'bold'}}>Share</Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                            {shareMessage != ""?
+                                                shareMessage == "Basket already shared."?<Text style={{color:'#000',fontWeight:'bold',marginTop:20}}>{shareMessage}</Text>:<Text style={{color:'#4caf50',fontWeight:'bold',marginTop:20}}>{shareMessage}</Text>
+                                                :
+                                                null
+                                            }
+                                        </>
+                                        
                                     )
                                 })
                             }    
@@ -202,7 +227,7 @@ const BasketTab = ()=>{
                     }
                 </View>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 

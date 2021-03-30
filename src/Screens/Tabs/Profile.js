@@ -29,11 +29,15 @@ const Profile = ({navigation})=>{
         }else if(index == 1){
             return <ProfileTab/>
         }else{
-            return <ChatList/>
+            return <ChatList viewBasket={viewBasket}/>
         }
     }
     const viewBrand = (brand)=>{
         navigation.navigate('brand', {data:brand, updateFollowing:updateFollowing});
+    }
+
+    const viewBasket = (user_id,owner)=>{
+        navigation.navigate("sharedBasket",{name:`${owner}'s basket`,"userId":user_id});
     }
 
     // function that's executed when you click follow button on retailer profile

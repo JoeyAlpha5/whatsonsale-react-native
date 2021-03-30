@@ -21,6 +21,7 @@ import ProfileSettings from './src/Components/ProfileSettings';
 import UpdatePassword from './src/Components/UpdatePassword';
 // basket
 import BasketTab from './src/Screens/Tabs/BasketTab';
+import sharedBaskets from './src/Components/SharedBasket';
 
 // 
 import { NavigationContainer } from '@react-navigation/native';
@@ -83,6 +84,7 @@ const App = () => {
             <ProfileStack.Screen name="post" component={ViewPost}/>
             <HomeStack.Screen name="locations" component={Locations} options={{headerShown:true}}/>
             <HomeStack.Screen name="products" component={Products} options={{headerShown:true}}/>
+            <ProfileStack.Screen name="sharedBasket" component={sharedBaskets} options={({ route }) => ({ title: route.params.name })}/>
       </ProfileStack.Navigator>
     )
   };
