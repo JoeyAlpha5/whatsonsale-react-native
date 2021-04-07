@@ -12,6 +12,8 @@ const ChatList = (props)=>{
     const [overlay,setOverlay] = useState(false);
     const [selectedBasketedToDelete,setSelectedBasketedToDelete] = useState();
     const actionSheetRef = createRef();
+    const height = useWindowDimensions().height;
+    
 
     useEffect(()=>{
         fetch(`https://whatsonsale-test.herokuapp.com/api/getSharedBaskets?userId=${authentication.currentUser.uid}`)
