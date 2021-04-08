@@ -1,16 +1,18 @@
 import React, {useState,useEffect,createRef} from 'react';
-import {Text,View,ActivityIndicator, ScrollView,StyleSheet,TouchableOpacity} from 'react-native';
+import {Text,View,ActivityIndicator, ScrollView,StyleSheet,TouchableOpacity,useWindowDimensions} from 'react-native';
 import {authentication} from '../../firebase/firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon,Overlay } from 'react-native-elements';
 import PopUp from '../../Components/PopUp';
 import ActionSheet from "react-native-actions-sheet";
+import Chat from './Chat';
 
 const ChatList = (props)=>{
     const [sharedBaskets,setSharedBaskets] =useState([]);
     const [fetchComplete,setFetchComplete] = useState(false);
     const [overlay,setOverlay] = useState(false);
     const [selectedBasketedToDelete,setSelectedBasketedToDelete] = useState();
+    const [chatData,setChatData] =  useState();
     const actionSheetRef = createRef();
     const height = useWindowDimensions().height;
     
@@ -38,8 +40,9 @@ const ChatList = (props)=>{
         })
     }
 
-    const viewChat = ()=>{
+    const viewChat = (index)=>{
         actionSheetRef.current?.setModalVisible();
+        setChatData(sharedBaskets[index]);
     }
     
     return(
@@ -48,16 +51,15 @@ const ChatList = (props)=>{
                 <ActivityIndicator size="small" color="#000000" />
                 :
                 sharedBaskets.map((item,index)=>{
-                    console.log(item)
                     return(
-                        <View style={style.tabs}>
+                        <View style={style.tabs} key={index}>
                             <View style={style.post}>
                                 <View>
                                     <Text style={{fontWeight:'bold',marginLeft:15}}>{item.owner}'s basket</Text>
                                     <Text style={{marginLeft:15,fontSize:12,color:'#575757'}}>shared with {item.basket_friend}</Text>
                                     <View style={{flexDirection:'row',marginLeft:15,marginTop:5}}>
                                         <TouchableOpacity onPress={()=>props.viewBasket(item.owner_user_id,item.owner)}><Text style={{fontSize:12,fontWeight:'bold',textDecorationLine:'underline'}}>View basket</Text></TouchableOpacity>
-                                        <TouchableOpacity onPress={viewChat}><Text style={{fontSize:12,marginLeft:15,fontWeight:'bold',color:'#DA0E2F',textDecorationLine:'underline'}}>Messages</Text></TouchableOpacity>
+                                        <TouchableOpacity onPress={()=>viewChat(index)}><Text style={{fontSize:12,marginLeft:15,fontWeight:'bold',color:'#DA0E2F',textDecorationLine:'underline'}}>Messages</Text></TouchableOpacity>
                                     </View>
                                 </View>
                                 <TouchableOpacity onPress={()=>deleteBasket(item.shared_basket_id)}>
@@ -72,8 +74,8 @@ const ChatList = (props)=>{
                 <PopUp errorBtn={()=>confirmDeletion()} text={"Comfirm deletion"} error={true} />
             </Overlay>
             <ActionSheet gestureEnabled={true} ref={actionSheetRef} containerStyle={{borderTopRightRadius:30,borderTopLeftRadius:30,backgroundColor:'#fff'}}>
-                <View style={style.actionSheet}>
-
+                <View style={style.actionSheet,{height:height*0.9}}>
+                    <Chat chatData={chatData}/>
                 </View>
             </ActionSheet>
         </ScrollView>
@@ -82,7 +84,6 @@ const ChatList = (props)=>{
 export default ChatList
 const style = StyleSheet.create({
     actionSheet:{
-        height:550,
         backgroundColor:'#fff',
         borderTopLeftRadius:30,
         borderTopRightRadius:30,

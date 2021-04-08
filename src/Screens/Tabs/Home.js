@@ -3,7 +3,7 @@ import {View, Text,StatusBar,FlatList,ActivityIndicator,RefreshControl} from 're
 import {authentication} from '../../firebase/firebase';
 import { useScrollToTop } from '@react-navigation/native';
 import Post from '../../Components/Post';
-const Home = ({navigation})=>{
+const Home = ({navigation,route})=>{
     const ref = useRef(null);
     useScrollToTop(ref);
     const [feed,setFeed] = useState([]);
