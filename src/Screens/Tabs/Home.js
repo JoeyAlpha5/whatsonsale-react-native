@@ -3,10 +3,12 @@ import {View, Text,StatusBar,FlatList,ActivityIndicator,RefreshControl} from 're
 import {authentication} from '../../firebase/firebase';
 import { useScrollToTop } from '@react-navigation/native';
 import Post from '../../Components/Post';
+import Trending from '../../Components/Trending';
 const Home = ({navigation,route})=>{
     const ref = useRef(null);
     useScrollToTop(ref);
     const [feed,setFeed] = useState([]);
+    const [trends,setTrends] = useState([]);
     const [postIds,setPostIds] = useState([]);
     const [Refreshing,setRefreshing] = useState(false);
     const [morePostToLoad,setMorePostToLoad] = useState(true);
@@ -38,6 +40,7 @@ const Home = ({navigation,route})=>{
             }else{
                 if(resetFeed == true){
                     setFeed(re.data);
+                    setTrends(re.trending_posts);
                 }else{
                     setFeed([...feed,...re.data])
                 }
@@ -82,9 +85,14 @@ const Home = ({navigation,route})=>{
         // onRefresh();
     }
 
+    const viewTrend = (index)=>{
+        navigation.navigate("post",{data:{"post":trends[index].post,"brand":trends[index].brand,"updatePostArray":onRefresh}});
+    }
+
     return(
         <View style={{flex:1}}>
             <StatusBar  backgroundColor="#fff" barStyle="dark-content"/>
+            
             {gotFeed == false?
                 (
                     <View style={{flex:1,justifyContent:'center',alignItems:'center',height:'100%'}}>
@@ -103,7 +111,11 @@ const Home = ({navigation,route})=>{
                         refreshControl={<RefreshControl colors={['#000000']} refreshing={Refreshing} onRefresh={onRefresh}/>} 
                         keyExtractor={( item,index ) => {return index.toFixed()} }
                         renderItem={({item,index})=>(
-                            <Post data={item} viewBrand={viewBrand} viewProducts={viewProducts} viewLocations={viewLocations}/>
+                            <>
+            
+                                {index == 0? <Trending trends={trends} viewTrend={viewTrend}/>:null}
+                                <Post key={index} data={item} viewBrand={viewBrand} viewProducts={viewProducts} viewLocations={viewLocations}/>
+                            </>
                         )}
                     />
                 )

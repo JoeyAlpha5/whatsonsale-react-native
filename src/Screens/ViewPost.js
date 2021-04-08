@@ -111,7 +111,7 @@ const ViewPost = ({navigation,route})=>{
                     (
                         <View>
                             <TouchableOpacity onPress={()=>setPaused(!paused)}>
-                                <Video repeat={true} source={{uri: catalogue[0].fields.image}} paused={paused} style={{width:width*0.90,height:width*0.90, backgroundColor:'#000000',marginTop:10}}  />
+                                <Video repeat={true} source={{uri: catalogue[0].fields.image}} paused={paused} resizeMode="contain" style={{width:width*0.90,height:width*0.90, backgroundColor:'#000000',marginTop:10,borderRadius:10}}  />
                             </TouchableOpacity>
                             <Ionicons name="ios-videocam-outline" size={22} color="#575757"/>
                         </View>
@@ -153,7 +153,7 @@ const ViewPost = ({navigation,route})=>{
                             <Text style={{color:"#575757",fontSize:12}}>{item.post.likes_count}</Text>
                             <Ionicons style={{marginLeft:12}} name="eye-outline" size={22} color="#575757"/>
                             <Text style={{color:"#575757",fontSize:12}}>{item.post.views_count}</Text>
-                            <Ionicons style={{marginLeft:12}} name="share-social-outline" size={22} color="#575757"/>
+                            {/* <Ionicons style={{marginLeft:12}} name="share-social-outline" size={22} color="#575757"/> */}
                         </View>
                         <View style={{flexDirection:'row',marginRight:15,alignItems:'center'}}>
                             <Text style={{color:"#575757",fontSize:12}}>{item.post.comments_count}</Text>
