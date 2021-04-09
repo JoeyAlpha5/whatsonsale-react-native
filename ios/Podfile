@@ -3,8 +3,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-
-
 target 'whatsonsale' do
 
   # React Native Maps dependencies
@@ -28,6 +26,10 @@ target 'whatsonsale' do
   # target 'whatsonsaleTests' do
   #   inherit! :complete
   #   # Pods for testing
+  # end
+
+  # target 'OneSignalNotificationServiceExtension' do
+  #   pod 'OneSignal', '>= 3.0', '< 4.0'
   # end
 
   # Enables Flipper.
