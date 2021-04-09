@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState,useEffect} from 'react';
-import {Text} from 'react-native';
+import {Platform} from 'react-native';
 // auth screens
 import Register from './src/Screens/Auth/Register';
 import GetStarted from './src/Screens/Auth/GetStarted';
@@ -34,7 +34,9 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 // splash screen
 import SplashScreen from 'react-native-splash-screen';
-
+// push notifications
+import OneSignal from 'react-native-onesignal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const App = () => {
   const [signedIn, setSignedIn] = useState(true);
   const SignedOut = createStackNavigator();
@@ -43,7 +45,32 @@ const App = () => {
   // disable splash screen
   useEffect(()=>{
     SplashScreen.hide();
+    // set up one signal
+    PushService()
   },[])
+
+
+  const PushService = async ()=>{
+    if(Platform.OS == "android"){
+      OneSignal.setAppId("a12302aa-fb11-4f23-b332-bad4b2e8fc8f");
+    }else{
+      OneSignal.setAppId("ce8572ae-ff57-4e77-a265-5c91f00ecc4c");
+    }
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.setRequiresUserPrivacyConsent(false);
+    
+    if(Platform.OS != "android"){
+      OneSignal.promptForPushNotificationsWithUserResponse(response => {
+        console.log("Prompt response:", response);
+      });
+    }
+
+    var device = await OneSignal.getDeviceState();
+    if(device.pushToken != undefined){
+      await AsyncStorage.setItem("push_token", device.pushToken);
+      console.log(device.pushToken)
+    }
+  }
 
   // update sign in state
   const signIn = (val) =>{

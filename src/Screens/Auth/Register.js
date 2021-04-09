@@ -5,6 +5,7 @@ import Loader from '../../Components/Loader';
 import {View, Text, StatusBar,StyleSheet, Image,TouchableOpacity, TextInput,ScrollView} from 'react-native';
 import { Icon, Overlay } from 'react-native-elements';
 import {authentication} from '../../firebase/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Register = ({navigation,route})=>{
     const [overlay,setOverlay] = useState(false);
     const [OverlayText,setOverlayText] = useState("");
@@ -22,32 +23,36 @@ const Register = ({navigation,route})=>{
         navigation.navigate("getStarted");
     }
 
-    const createAccount = () =>{
+    const createAccount = async () =>{
         setLoader(true);
         // route.params.authenticate(true);
-        var register = authentication.createUserWithEmailAndPassword(Email,Password);
-        register.then((user)=>{
-            // send verification email
-            authentication.currentUser.sendEmailVerification();
-            // save user data in django backend
-            fetch('https://whatsonsale-test.herokuapp.com/api/createAccount', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body:"name="+name+"&email="+Email+"&mobile="+Mobile+"&user_id="+authentication.currentUser.uid,
-            }).then(()=>{
+        
+        await AsyncStorage.getItem('push_token').then((push_token)=>{
+            var register = authentication.createUserWithEmailAndPassword(Email,Password);
+            register.then((user)=>{
+                // send verification email
+                authentication.currentUser.sendEmailVerification();
+                // save user data in django backend
+                fetch('https://whatsonsale-test.herokuapp.com/api/createAccount', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body:"push_token="+push_token+"&name="+name+"&email="+Email+"&mobile="+Mobile+"&user_id="+authentication.currentUser.uid,
+                }).then(()=>{
+                    setLoader(false);
+                    setRegistered(true); 
+                }).catch((err)=>{
+                    setLoader(false);
+                    showErr(true,true,"Registration error.");
+                })
+                
+            }).catch(err=>{
                 setLoader(false);
-                setRegistered(true); 
-            }).catch((err)=>{
-                setLoader(false);
-                showErr(true,true,"Registration error.");
+                showErr(true,true,err.message);
             })
-            
-        }).catch(err=>{
-            setLoader(false);
-            showErr(true,true,err.message);
-        })
+            console.log(push_token);
+        });
     }
 
     const validate = ()=>{
@@ -103,7 +108,7 @@ const Register = ({navigation,route})=>{
                     <View style={{width:'80%',marginBottom:20,marginTop:40}}>
                         <TextInput value={name} onChangeText={text => onChangeName(text)} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10}} placeholderTextColor="#fff" placeholder="Full name" />  
                         <TextInput value={Email} onChangeText={text => onChangeEmail(text)} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10,marginTop:10}} placeholderTextColor="#fff" placeholder="Email" /> 
-                        <TextInput  value={Mobile} onChangeText={text => onChangeMobile(text)} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10,marginTop:10}} placeholderTextColor="#fff" placeholder="Mobile" />
+                        <TextInput keyboardType="numeric" value={Mobile} onChangeText={text => onChangeMobile(text)} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10,marginTop:10}} placeholderTextColor="#fff" placeholder="Mobile" />
                         <TextInput value={Password} onChangeText={text => onChangePassword(text)} secureTextEntry={true} style={{height:52,width:'100%',color:'white',borderRadius:10,borderWidth:1,borderColor:'white',paddingLeft:10,marginTop:10}} placeholderTextColor="#fff" placeholder="Password" />
                         <TextInput  value={ConfirmPassword} onChangeText={text => onChangeConfirmPassword(text)} secureTextEntry={true} style={{height:52,width:'100%',color:'white',borderRadius:10,marginTop:10,borderWidth:1,borderColor:'white',paddingLeft:10}} placeholderTextColor="#fff" placeholder="Confirm Password" />  
                     </View>
